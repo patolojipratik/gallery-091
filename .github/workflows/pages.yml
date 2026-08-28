@@ -1,6 +1,8 @@
 name: Pages dagitimi
 
 "on":
+  push:
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -18,38 +20,35 @@ jobs:
     timeout-minutes: 30
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Yalnizca Pages kabugunu al
+      - name: Pages dosyalarini al
         uses: actions/checkout@v6
         with:
           fetch-depth: 1
-          sparse-checkout: |
-            index.html
-            slide.dzi
-            thumbnail.jpg
-            label.jpg
-            metadata.json
-            .nojekyll
-          sparse-checkout-cone-mode: false
 
       - name: Pages ayarlarini oku
         uses: actions/configure-pages@v6
 
-      - name: Hafif Pages paketini hazirla
+      - name: Pages paketini hazirla
         shell: bash
         run: |
           set -euo pipefail
+          test -f index.html
+          test -f slide.dzi
+          test -d slide_files
           rm -rf _pages_site
           mkdir -p _pages_site
-          cp index.html slide.dzi thumbnail.jpg _pages_site/
+          cp index.html slide.dzi _pages_site/
+          cp -a slide_files _pages_site/
+          test -f thumbnail.jpg && cp thumbnail.jpg _pages_site/ || true
           test -f label.jpg && cp label.jpg _pages_site/ || true
           test -f metadata.json && cp metadata.json _pages_site/ || true
           test -f .nojekyll && cp .nojekyll _pages_site/ || true
-          echo "Pages paketindeki dosyalar:"
-          find _pages_site -maxdepth 1 -type f -printf '%f\n' | sort
+          echo "Pages paketi hazir. Tile sayisi:"
+          find _pages_site/slide_files -type f | wc -l
+          du -sh _pages_site
 
-      - name: Hafif Pages artifact'ini yukle
+      - name: Pages artifact'ini yukle
         id: upload
         uses: actions/upload-pages-artifact@v5
         with:
