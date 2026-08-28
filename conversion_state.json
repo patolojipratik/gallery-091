@@ -1,0 +1,13 @@
+{
+  "width": 43392,
+  "height": 44736,
+  "max_dzi_level": 16,
+  "last_completed_level": 16,
+  "completed_tiles": 10036,
+  "total_tiles": 10036,
+  "jpeg_quality": 72,
+  "tile_size": 512,
+  "super_tile_size": 2048,
+  "encode_workers": 4,
+  "jpeg_subsampling": 2
+}

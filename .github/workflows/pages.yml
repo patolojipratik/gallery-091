@@ -1,0 +1,61 @@
+name: Pages dagitimi
+
+"on":
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Yalnizca Pages kabugunu al
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          sparse-checkout: |
+            index.html
+            slide.dzi
+            thumbnail.jpg
+            label.jpg
+            metadata.json
+            .nojekyll
+          sparse-checkout-cone-mode: false
+
+      - name: Pages ayarlarini oku
+        uses: actions/configure-pages@v6
+
+      - name: Hafif Pages paketini hazirla
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf _pages_site
+          mkdir -p _pages_site
+          cp index.html slide.dzi thumbnail.jpg _pages_site/
+          test -f label.jpg && cp label.jpg _pages_site/ || true
+          test -f metadata.json && cp metadata.json _pages_site/ || true
+          test -f .nojekyll && cp .nojekyll _pages_site/ || true
+          echo "Pages paketindeki dosyalar:"
+          find _pages_site -maxdepth 1 -type f -printf '%f\n' | sort
+
+      - name: Hafif Pages artifact'ini yukle
+        id: upload
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _pages_site
+          include-hidden-files: true
+
+      - name: Pages'e dagit
+        id: deployment
+        uses: actions/deploy-pages@v5

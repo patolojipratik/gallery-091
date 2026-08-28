@@ -1,0 +1,3 @@
+*.jpeg -delta
+*.jpg -delta
+*.png -delta

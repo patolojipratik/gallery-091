@@ -1,0 +1,15 @@
+{
+  "gallery_id": "gallery-091",
+  "source_name": "kc_yaglanma_x20_H&E.svs",
+  "source_format": "SVS",
+  "width": 43392,
+  "height": 44736,
+  "total_tiles": 10036,
+  "completed_tiles": 10036,
+  "has_label": false,
+  "jpeg_quality": 72,
+  "jpeg_subsampling": 2,
+  "tile_size": 512,
+  "super_tile_size": 2048,
+  "encode_workers": 4
+}

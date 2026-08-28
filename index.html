@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="patoloji-pages-mode" content="patoloji-lightweight-pages-v1">
+<title>gallery-091</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js"></script>
+<style>
+html,body{height:100%;margin:0;background:#0b111c;color:#fff;font-family:Inter,system-ui,Segoe UI,sans-serif}
+#bar{height:54px;display:flex;align-items:center;gap:10px;padding:0 14px;background:#10213a;border-bottom:1px solid #29405f}
+#bar a,#bar button{color:#fff;background:#1f395d;border:1px solid #36577f;border-radius:9px;padding:8px 13px;text-decoration:none;cursor:pointer}
+#bar a:hover,#bar button:hover{background:#2b4c76}
+#title{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#viewer{height:calc(100% - 54px);width:100%}
+dialog{max-width:min(92vw,850px);background:#15243a;color:#fff;border:1px solid #55708f;border-radius:14px}
+dialog img{display:block;max-width:85vw;max-height:78vh;margin-top:10px}
+</style>
+</head>
+<body>
+<div id="bar"><a href="https://patolojipratik.github.io/galeri/">Ana galeri</a><span id="title">gallery-091</span></div>
+<div id="viewer"></div>
+<script>
+const tileSource=new OpenSeadragon.DziTileSource({width:43392,height:44736,tileSize:512,tileOverlap:1,tilesUrl:"https://raw.githubusercontent.com/patolojipratik/gallery-091/main/slide_files/",fileFormat:"jpeg"});
+OpenSeadragon({id:'viewer',prefixUrl:'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/images/',tileSources:tileSource,showNavigator:true,showRotationControl:true,gestureSettingsMouse:{clickToZoom:true}});
+function parseCSV(text){
+  const rows=[];let row=[],cell='',quoted=false;
+  for(let i=0;i<text.length;i++){const ch=text[i];
+    if(quoted){if(ch==='"'&&text[i+1]==='"'){cell+='"';i++;}else if(ch==='"')quoted=false;else cell+=ch;}
+    else if(ch==='"')quoted=true;else if(ch===','){row.push(cell);cell='';}
+    else if(ch==='
+'){row.push(cell.replace(/$/,''));rows.push(row);row=[];cell='';}else cell+=ch;
+  }
+  if(cell||row.length){row.push(cell.replace(/$/,''));rows.push(row);}
+  const head=(rows.shift()||[]).map(x=>x.replace(/^﻿/,''));
+  return rows.filter(r=>r.some(Boolean)).map(r=>Object.fromEntries(head.map((h,i)=>[h,r[i]||''])));
+}
+Promise.all([
+ fetch("https://patolojipratik.github.io/galeri/slides.json").then(r=>r.json()).catch(()=>[]),
+ fetch("https://patolojipratik.github.io/galeri/slayt_bilgileri.csv"+'?'+Date.now()).then(r=>r.text()).then(parseCSV).catch(()=>[])
+]).then(([items,edits])=>{
+ const edit=edits.find(i=>i.gallery_id==="gallery-091")||{};
+ const base=items.find(i=>i.gallery_id==="gallery-091")||{};
+ const x=Object.assign({},base,edit);
+ document.getElementById('title').textContent=[x.gallery_id,x.organ,x.diagnosis||x.title].filter(Boolean).join(' - ');
+});
+const b=document.getElementById('labelButton'),d=document.getElementById('labelDialog'),c=document.getElementById('closeLabel');if(b&&d)b.onclick=()=>d.showModal();if(c&&d)c.onclick=()=>d.close();
+</script>
+</body></html>
