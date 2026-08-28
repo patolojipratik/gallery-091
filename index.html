@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="patoloji-pages-mode" content="patoloji-lightweight-pages-v1">
+<meta name="patoloji-pages-mode" content="patoloji-full-pages-v1">
 <title>gallery-091</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/openseadragon.min.js"></script>
 <style>
@@ -20,8 +20,7 @@ dialog img{display:block;max-width:85vw;max-height:78vh;margin-top:10px}
 <div id="bar"><a href="https://patolojipratik.github.io/galeri/">Ana galeri</a><span id="title">gallery-091</span></div>
 <div id="viewer"></div>
 <script>
-const tileSource=new OpenSeadragon.DziTileSource({width:43392,height:44736,tileSize:512,tileOverlap:1,tilesUrl:"https://raw.githubusercontent.com/patolojipratik/gallery-091/main/slide_files/",fileFormat:"jpeg"});
-OpenSeadragon({id:'viewer',prefixUrl:'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/images/',tileSources:tileSource,showNavigator:true,showRotationControl:true,gestureSettingsMouse:{clickToZoom:true}});
+OpenSeadragon({id:'viewer',prefixUrl:'https://cdnjs.cloudflare.com/ajax/libs/openseadragon/4.1.0/images/',tileSources:'slide.dzi',showNavigator:true,showRotationControl:true,gestureSettingsMouse:{clickToZoom:true}});
 function parseCSV(text){
   const rows=[];let row=[],cell='',quoted=false;
   for(let i=0;i<text.length;i++){const ch=text[i];
